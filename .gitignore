@@ -1,0 +1,4 @@
+.vscode/settings.json
+/juliopereiro/settings.py
+db.sqlite3
+*.pyc 
