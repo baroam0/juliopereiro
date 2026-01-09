@@ -1,0 +1,1 @@
+podman build -t django42-app .

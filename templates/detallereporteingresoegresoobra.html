@@ -1,0 +1,154 @@
+
+{% extends 'base_nomenu.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+    <style>
+
+        .nombreobra {
+            font-size: 15px;
+            font-weight: bold;
+        }
+    
+    </style>
+
+    <div class="container">
+
+        <div class="row">
+            RESULTADO
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>RUBROS</th>
+                    <th></th>
+                    <th>INGRESOS</th>
+                    <th>EGRESOS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td class="nombreobra">{{ obras }} </td>
+                    <td> </td>
+                    <td class="nombreobra"> {{ obras.empresa }}</td>
+                    <td> </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>EGRESOS</b>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                {% for k,v in dictrubros.items %}
+                <tr>
+                    <td></td>
+                    <td>{{ k }}  </td>
+                    <td></td>
+                    <td> </td>
+                    <td> $ {{v |intcomma  }}  </td>
+                    
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td> </td>
+                    <td> <b> Suma EGRESOS </b> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> <b> $ {{totalpagos | intcomma}} </b> </td>
+                </tr>
+
+                <tr></tr>
+                    <td>
+                        <b>PRESUPUESTOS</b>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                {% for presupuesto in presupuestos %}
+                <tr>
+                    <td></td>
+                    <td>{{ presupuesto.contratista__descripcion }} </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> $ {{presupuesto.total_entregado|intcomma }} </td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td> </td>
+                    <td> <b> Suma PRESUPUESTOS </b> </td>
+                    <td> </td>
+                    <td> <b>  </b> </td>
+                    <td> <b> $ {{ totalpresupuestoentregado |floatformat:2|intcomma }} </b> </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <b>INGRESOS</b>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                {% for cobro in cobros  %}
+                    <tr>
+                        <td>  </td>
+                        <td>{{ cobro.descripcion }}  </td>
+                        <td>  </td>
+                        {% if cobro.totalfacturacion %}
+                            <td>$ {{ cobro.totalfacturacion | intcomma }}</td>
+                        {% else %}
+                            <td>$ 00,00 </td>
+                        {% endif %}
+                        <td>  </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td> </td>
+                    <td> <b> Suma INGRESOS </b> </td>
+                    <td> </td>
+                    <td> <b> $ {{totalcobros | intcomma }} </b> </td>
+                    <td> </td>
+                    <td> </td>
+                </tr>
+
+                <tr>
+                    <td> </td>
+                    <td> <b> RESULTADO </b> </td>
+                    <td> </td>
+                    <td> </td>
+                    <td> <b> $ {{saldo | intcomma }} </b></td>
+                    
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+    </div>
+
+
+{% endblock %}
+
+    <script>
+        $(document).ready(function () {
+            
+        });    
+    </script>

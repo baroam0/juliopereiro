@@ -1,0 +1,142 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <br>
+        
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3> Reportes de Factura Individual. </h3>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <hr>
+
+        <form action="/reportes/" method="GET">
+            <div class="form-inline">
+                <div class="col-6">
+                    <label>Proveedores</label>
+                    <select id="id_proveedor" class="form-control">
+                        <option value="0"> ------------- </option>
+                        {% for proveedor in proveedores %}
+                            <option value={{proveedor.pk}}> {{proveedor.proveedor }} - {{proveedor.comprobante}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-6">
+                    <label>Banco</label>
+                    <select id="id_banco" class="form-control">
+                    </select>
+                </div>
+                
+            </div>
+
+
+            <div class="form-inline">
+                <div class="col-6">
+                    <label for="id_fechadesde">Fecha Desde:</label> 
+                    <input type="text" name="id_fechadesde" class="form-control" required id="id_fechadesde">
+                </div>
+
+                <div class="col-6">
+                    <label for="id_fechahasta">Fecha Hasta:</label> 
+                    <input type="text" name="id_fechahasta" class="form-control" required id="id_fechahasta">
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-inline">
+                <div class="col-6">
+                </div>
+            </div>
+
+            <div class="form-inline">
+                <div class="col-4">
+                </div>
+
+                <div class="col-4">
+                    <button type="button" class="btn btn-default" title="Generar" onclick="AbrirVentanaReporte()">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+
+                <div class="col-4">
+                </div>
+            </div>
+
+            <br>
+
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block js_extra %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_proveedor').select2();
+            TranslateDatepickerToEs($("#id_fechadesde"));
+            TranslateDatepickerToEs($("#id_fechahasta"));
+        });
+
+
+        $("#id_proveedor").on('change', function(e) {
+            var idproveedor = $(this).select2('data')[0].id;
+            //CargarCombo($(this).select2('data')[0].id);
+            CargarCombo(idproveedor);
+        });
+
+
+        function CargarCombo(id){
+            $.ajax({
+                type: "GET",
+                url: "/ajaxbancoproveedor/" + id,
+                dataType: "json",
+                success: function (response) {
+                    var select = $('#id_banco');
+                    select.empty();
+
+                    $.each(response, function(index, value) {
+                    select.append($('<option>', {
+                        value: value.id,
+                        text: value.text
+                    }));
+            });
+                }
+            });
+        }
+
+        function AbrirVentanaReporte(){
+            var id_proveedor = $("#id_proveedor").val();
+            var id_banco = $("#id_banco").val();
+            var id_fechadesde = $("#id_fechadesde").val();
+            var id_fechahasta = $("#id_fechahasta").val();
+
+            if(id_banco==0 || id_banco==null){
+                Swal.fire(
+                    'Por favor elige un Banco',
+                    '',
+                    'warning'
+                )
+                return false;
+            }
+            
+            var urldetallefactura = "/detallereporte/?id_proveedor=" + id_proveedor + "&id_banco=" + id_banco + "&id_fechadesde=" + id_fechadesde + "&id_fechahasta=" + id_fechahasta ;
+            window.open(urldetallefactura,"Ratting","width=750,height=650,left=100,top=100,toolbar=0,status=0,");
+        }
+
+
+
+    
+    </script>
+
+{% endblock %}

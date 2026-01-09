@@ -1,0 +1,123 @@
+
+{% extends 'base_nomenu.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3 fecha">DESDE: {{fechadesde }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-3 fecha">HASTA: {{fechahasta}}</div>
+        </div>
+
+        <h4> RESUMEN </h4>           
+            {% for key, value in datadict.items %} 
+                
+                <h5> {{facturaproveedor.proveedor}} </h5>
+                    
+
+                {% for v in value %}
+                    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h6> {{v.empresa}} </h6>
+                        </div>
+                    </div>
+                    {% for e in v.data%}
+
+                        <div class="row">
+                            <div class="col-sm-12 nombreobra">
+                                <b>{{e.obra}}</b>
+                            </div>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>FECHA</th>
+                                    <th>COMPROBANTE</th> 
+                                    <th>CANTIDAD</th>
+                                    <th>DESCRIPCION</th>
+                                    <th>PRECIO FINAL</th>
+                                    <th>MONTO</th>
+                                </tr>
+                            </thead>
+                            
+                            {% for a in e.data%}
+                                <tbody>
+                                    <tr height="20px">
+                                        <td width="15">{{ a.fecha | date:"d-m-Y" }} </td>
+                                        <td width="15">{{ a.comprobante }}  </td>
+                                        <td width="15">{{ a.cantidad }} </td>
+                                        <td width="25">{{ a.detalle }} </td>
+                                        <td width="15">$ {{ a.preciofinal | intcomma }} </td>
+                                        <td width="15"s>$ {{ a.total | intcomma }}</td>
+                                    </tr>       
+                                </tbody>
+                            {%endfor%}
+                        </table>
+
+                        {% for el in dictotales%}
+                            {% if el.obra == e.obra %}
+                                <div class="row">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4 tituloobra"> <b> TOTAL {{el.obra}} : </b> </div>
+                                    <div class="col-sm-4 tituloobra"> <b> $ {{el.total | intcomma}}  </b> </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                    {%endfor%}
+                {% endfor %}
+
+            {%endfor%}
+            
+            <br>
+            <hr>
+            
+            {% for em in dicttotalempresa %}
+                <div class="row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-8"><b>TOTAL {{em.empresa}} : $ {{em.total | intcomma}}  </b></div>
+                    <div class="col-sm-2"></div>
+                </div>        
+            {% endfor %}
+            
+            {% for b in banco %}
+				<h6>Banco: {{b.descripcionbanco.upper}} </h6>
+			    <h6>Alias: {{b.alias}} </h6>
+				<h6>CBU: {{b.cbu}} </h6>
+            {% endfor %}
+        <hr>
+
+    <!--/div-->
+
+
+
+{% endblock %}
+
+
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+    
+    </script>
+
